@@ -14,8 +14,7 @@ uses
 type
   TJSONUtils = class
   public
-    class function ObjectToJsonString(AObject: TObject): string; static;
-    class function Serialize<T: class, constructor>(const AObject: T): string; static;
+    class function Serialize(const AObject: TObject): string; static;
     class function Deserialize<T: class, constructor>(const AJson: string): T; static;
   end;
 
@@ -23,7 +22,7 @@ implementation
 
 { TJSONUtils }
 
-class function TJSONUtils.ObjectToJsonString(AObject: TObject): string;
+class function TJSONUtils.Serialize(const AObject: TObject): string;
 var
   ctx: TRttiContext;
   rType: TRttiType;
@@ -111,11 +110,6 @@ begin
     ctx.Free;
     JSON.Free;
   end;
-end;
-
-class function TJSONUtils.Serialize<T>(const AObject: T): string;
-begin
-  Result := ObjectToJsonString(AObject);
 end;
 
 class function TJSONUtils.Deserialize<T>(const AJson: string): T;
