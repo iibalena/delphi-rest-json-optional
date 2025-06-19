@@ -13,8 +13,10 @@ type
     btnCarregarJson: TButton;
     MemoJSON: TMemo;
     MemoLog: TMemo;
+    btnEnviarApi: TButton;
     procedure btnGerarJsonClick(Sender: TObject);
     procedure btnCarregarJsonClick(Sender: TObject);
+    procedure btnEnviarApiClick(Sender: TObject);
   private
     procedure Log(const AMsg: string);
   public
@@ -26,13 +28,46 @@ var
 implementation
 
 uses
-  Model.Lancamento, Service.JSONUtils, APi.Types.Optional;
+  Model.Lancamento, Model.Response, Service.JSONUtils, APi.Types.Optional, APi.Abstract.Service;
 
 {$R *.dfm}
 
 procedure TMainDemo.Log(const AMsg: string);
 begin
   MemoLog.Lines.Add(FormatDateTime('hh:nn:ss.zzz', Now) + ' - ' + AMsg);
+end;
+
+procedure TMainDemo.btnEnviarApiClick(Sender: TObject);
+var
+  Payload: TLancamentoPayload;
+  Response: TAPIResponse;
+begin
+  Payload := TLancamentoPayload.Create;
+  try
+    Payload.ParceiroId := 123;
+    Payload.NumeroDocumento := 'ABC123';
+    Payload.DataVencimento := '2025-01-15';
+    Payload.DataCompetencia := '2025-01-01';
+    Payload.Valor := 250.5;
+    Payload.Pago := False;
+    Payload.ContaBancariaId := TOptional<Integer>.Empty;
+    Payload.DataPagamento := TOptional<string>.Empty;
+
+    try
+      Response := TAPIBaseService<TLancamentoPayload, TAPIResponse>.Post('https://httpbin.org/post', Payload);
+      try
+        MemoLog.Lines.Add('Resposta: ' + Response.message);
+      finally
+        Response.Free;
+      end;
+    except
+      on E: Exception do
+        Log('Erro: ' + E.message);
+    end;
+
+  finally
+    Payload.Free;
+  end;
 end;
 
 procedure TMainDemo.btnGerarJsonClick(Sender: TObject);

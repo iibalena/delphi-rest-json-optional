@@ -24,7 +24,7 @@ object MainDemo: TMainDemo
     OnClick = btnGerarJsonClick
   end
   object btnCarregarJson: TButton
-    Left = 152
+    Left = 149
     Top = 16
     Width = 120
     Height = 25
@@ -49,5 +49,14 @@ object MainDemo: TMainDemo
     Anchors = [akLeft, akTop, akRight, akBottom]
     ScrollBars = ssVertical
     TabOrder = 3
+  end
+  object btnEnviarApi: TButton
+    Left = 279
+    Top = 16
+    Width = 120
+    Height = 25
+    Caption = 'Enviar a API'
+    TabOrder = 4
+    OnClick = btnEnviarApiClick
   end
 end
