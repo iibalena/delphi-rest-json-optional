@@ -18,5 +18,6 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TMainDemo, FormMainDemo);
   Application.Run;
 end.
