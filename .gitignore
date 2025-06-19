@@ -1,0 +1,59 @@
+# Delphi compiled files
+*.dcu
+*.dcp
+*.~*
+*.bpl
+*.dcpil
+*.drc
+*.local
+*.identcache
+*.rsm
+*.hpp
+
+# Delphi project-related temporary files
+*.exe
+*.dll
+*.map
+*.tds
+*.dbg
+*.bak
+*.bck
+*.obj
+*.ocx
+*.pdb
+*.dsk
+*.tmp
+*.tgs
+*.log
+*.stat
+
+# Config / Backup
+__history/
+__recovery/
+*.~pas
+*.~dfm
+*.~dpr
+*.~dpk
+*.~dproj
+*.~res
+*.~bdsproj
+*.~dof
+*.~cfg
+*.~bpr
+
+# Output folders 
+Win32/
+Win64/
+
+# Delphi IDE-specific
+*.identcache
+*.ipj
+*.local
+*.groupproj.local
+*.dproj.local
+*.tvsconfig
+
+# Misc
+*.stat
+*.tvsconfig
+
