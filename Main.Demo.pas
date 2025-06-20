@@ -54,8 +54,8 @@ begin
     LPayload.DataCompetencia := '2025-01-01';
     LPayload.Valor := 250.5;
     LPayload.Pago := False;
-    LPayload.ContaBancariaId := TOptional<Integer>.Empty;
-    LPayload.DataPagamento := TOptional<string>.Empty;
+    LPayload.ContaBancariaId := TOptional<Integer>.Empty; //Aqui o JSON gerará null
+    LPayload.DataPagamento := TOptional<string>.Create(''); //Aqui também gerará, pois '' considera como vazio.
 
     try
       LResponse := TAPILancamentoService.Cadastrar(LPayload);
