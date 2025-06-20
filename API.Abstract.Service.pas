@@ -12,7 +12,9 @@ type
     class function Post(
       const AUrl: string;
       const AData: TRequest;
-      const AHeaders: TDictionary<string, string> = nil
+      const AHeaders: TDictionary<string, string> = nil;
+      const ADirectoryFileName: String = '';
+      const AFileName: String = ''
     ): TResponse;
   end;
 
@@ -20,10 +22,15 @@ implementation
 
 { TAPIBaseService<TRequest, TResponse> }
 
+uses
+  API.LoggerHelper;
+
 class function TAPIBaseService<TRequest, TResponse>.Post(
   const AUrl: string;
   const AData: TRequest;
-  const AHeaders: TDictionary<string, string>
+  const AHeaders: TDictionary<string, string>;
+  const ADirectoryFileName: String;
+  const AFileName: String
 ): TResponse;
 var
   Client: THTTPClient;
@@ -37,6 +44,10 @@ begin
   Client := THTTPClient.Create;
   try
     JsonRequest := TJSONUtils.Serialize(AData);
+
+    if (AFileName <> '') then
+      SaveLogJSON(ADirectoryFileName, AFileName, 'req', JsonRequest, 'POST');
+
     Stream := TStringStream.Create(JsonRequest, TEncoding.UTF8);
     try
       if AHeaders <> nil then
@@ -44,11 +55,14 @@ begin
           Client.CustomHeaders[Header.Key] := Header.Value;
 
       Response := Client.Post(AUrl, Stream);
+      JsonResponse := Response.ContentAsString(TEncoding.UTF8);
+
+      if (AFileName <> '') then
+        SaveLogJSON(ADirectoryFileName, AFileName, 'res', JsonResponse, 'POST');
 
       if Response.StatusCode <> 200 then
         raise Exception.CreateFmt('Erro ao enviar requisição: %s', [Response.StatusText]);
 
-      JsonResponse := Response.ContentAsString(TEncoding.UTF8);
       Result := TJSONUtils.Deserialize<TResponse>(JsonResponse);
     finally
       Stream.Free;
@@ -57,6 +71,8 @@ begin
     Client.Free;
   end;
 end;
+
+
 
 end.
 
