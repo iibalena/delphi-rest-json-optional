@@ -84,7 +84,6 @@
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
-        <DCC_Define>madExcept;$(DCC_Define)</DCC_Define>
         <DCC_MapFile>3</DCC_MapFile>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -106,6 +105,8 @@
         </DCCReference>
         <DCCReference Include="Model.Lancamento.pas"/>
         <DCCReference Include="API.Types.Optional.pas"/>
+        <DCCReference Include="API.LoggerHelper.pas"/>
+        <DCCReference Include="API.Lancamento.Service.pas"/>
         <DCCReference Include="Service.JSONUtils.pas"/>
         <DCCReference Include="API.Abstract.Service.pas"/>
         <BuildConfiguration Include="Base">
