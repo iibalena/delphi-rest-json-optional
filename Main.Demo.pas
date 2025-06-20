@@ -51,11 +51,12 @@ begin
     LPayload.ParceiroId := 123;
     LPayload.NumeroDocumento := 'ABC123';
     LPayload.DataVencimento := '2025-01-15';
-    LPayload.DataCompetencia := '2025-01-01';
     LPayload.Valor := 250.5;
     LPayload.Pago := False;
+
     LPayload.ContaBancariaId := TOptional<Integer>.Empty; //Aqui o JSON gerará null
     LPayload.DataPagamento := TOptional<string>.Create(''); //Aqui também gerará, pois '' considera como vazio.
+    LPayload.DataCompetencia := ''; //Aqui também gerará, pois está usando a conversão implícita
 
     try
       LResponse := TAPILancamentoService.Cadastrar(LPayload);
