@@ -35,6 +35,38 @@ DelphiRestJsonOptional/
 ---
 
 ## ✅ Como usar `TOptional<T>`
+---
+
+## 🔄 Conversão Implícita e Explícita com TOptional<T>
+
+A classe `TOptional<T>` suporta conversões automáticas (implícitas) para facilitar seu uso no código:
+
+### ✅ De valor comum para TOptional<T>
+
+```delphi
+Payload.ContaBancariaId := 123;
+// Equivalente a:
+Payload.ContaBancariaId := TOptional<Integer>.Create(123);
+```
+
+### ✅ De TOptional<T> para valor comum
+
+```delphi
+var
+  id: Integer;
+begin
+  if Payload.ContaBancariaId.HasValue then
+    id := Payload.ContaBancariaId;
+// Equivalente a:
+  id := Payload.ContaBancariaId.GetValue;
+```
+
+### ⚠️ Importante
+
+Se `HasValue = False`, a conversão para tipo comum lança uma exceção.
+Portanto, sempre valide com `HasValue` antes de acessar o valor diretamente.
+
+
 
 Este projeto utiliza o tipo genérico `TOptional<T>` para indicar campos opcionais de forma clara e controlada.
 

@@ -36,6 +36,37 @@ DelphiRestJsonOptional/
 ---
 
 ## ✅ How to use `TOptional<T>`
+---
+
+## 🔄 Implicit and Explicit Conversion with TOptional<T>
+
+The `TOptional<T>` class supports automatic (implicit) conversions to simplify usage:
+
+### ✅ From native value to TOptional<T>
+
+```delphi
+Payload.ContaBancariaId := 123;
+// Equivalent to:
+Payload.ContaBancariaId := TOptional<Integer>.Create(123);
+```
+
+### ✅ From TOptional<T> to native value
+
+```delphi
+var
+  id: Integer;
+begin
+  if Payload.ContaBancariaId.HasValue then
+    id := Payload.ContaBancariaId;
+// Equivalent to:
+  id := Payload.ContaBancariaId.GetValue;
+```
+
+### ⚠️ Important
+
+If `HasValue = False`, converting to the native type will raise an exception.
+Always check `HasValue` before accessing the value directly.
+
 
 This project uses the generic type `TOptional<T>` to clearly and reliably handle optional fields.
 
