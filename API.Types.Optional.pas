@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils,
   System.Rtti,
-  System.Variants;
+  System.Variants,
+  System.TypInfo;
 
 type
   TOptional<T> = record
@@ -28,9 +29,46 @@ implementation
 { TOptional<T> }
 
 class function TOptional<T>.Create(const AValue: T): TOptional<T>;
+var
+  ctx: TRttiContext;
+  rttiType: TRttiType;
 begin
-  Result.FHasValue := True;
   Result.FValue := AValue;
+  Result.FHasValue := True;
+
+  ctx := TRttiContext.Create;
+  try
+    rttiType := ctx.GetType(TypeInfo(T));
+
+    if rttiType.TypeKind = tkInteger then
+    begin
+      if TValue.From<T>(AValue).AsInteger = 0 then
+        Result.FHasValue := False;
+    end
+    else if rttiType.TypeKind = tkFloat then
+    begin
+      if TValue.From<T>(AValue).AsExtended = 0 then
+        Result.FHasValue := False;
+    end
+    else if rttiType.TypeKind = tkUString then
+    begin
+      if TValue.From<T>(AValue).AsString = '' then
+        Result.FHasValue := False;
+    end
+    else if rttiType.TypeKind in [tkChar, tkWChar, tkString] then
+    begin
+      if TValue.From<T>(AValue).AsString = '' then
+        Result.FHasValue := False;
+    end
+    else if rttiType.TypeKind = tkEnumeration then
+    begin
+      if (rttiType.Handle = TypeInfo(Boolean)) and (TValue.From<T>(AValue).AsBoolean = False) then
+        Result.FHasValue := False;
+    end;
+
+  finally
+    ctx.Free;
+  end;
 end;
 
 class function TOptional<T>.Empty: TOptional<T>;
