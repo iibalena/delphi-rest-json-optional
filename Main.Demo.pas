@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes,
+  System.Classes, System.Generics.Collections,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
 
 type
@@ -28,7 +28,11 @@ var
 implementation
 
 uses
-  Model.Lancamento, Model.Response, Service.JSONUtils, APi.Types.Optional, APi.Abstract.Service;
+  Model.Lancamento,
+  Model.Response,
+  Service.JSONUtils,
+  APi.Lancamento.Service,
+  APi.Types.Optional;
 
 {$R *.dfm}
 
@@ -39,26 +43,26 @@ end;
 
 procedure TMainDemo.btnEnviarApiClick(Sender: TObject);
 var
-  Payload: TLancamentoPayload;
-  Response: TAPIResponse;
+  LPayload: TLancamentoPayload;
+  LResponse: TAPIResponse;
 begin
-  Payload := TLancamentoPayload.Create;
+  LPayload := TLancamentoPayload.Create;
   try
-    Payload.ParceiroId := 123;
-    Payload.NumeroDocumento := 'ABC123';
-    Payload.DataVencimento := '2025-01-15';
-    Payload.DataCompetencia := '2025-01-01';
-    Payload.Valor := 250.5;
-    Payload.Pago := False;
-    Payload.ContaBancariaId := TOptional<Integer>.Empty;
-    Payload.DataPagamento := TOptional<string>.Empty;
+    LPayload.ParceiroId := 123;
+    LPayload.NumeroDocumento := 'ABC123';
+    LPayload.DataVencimento := '2025-01-15';
+    LPayload.DataCompetencia := '2025-01-01';
+    LPayload.Valor := 250.5;
+    LPayload.Pago := False;
+    LPayload.ContaBancariaId := TOptional<Integer>.Empty;
+    LPayload.DataPagamento := TOptional<string>.Empty;
 
     try
-      Response := TAPIBaseService<TLancamentoPayload, TAPIResponse>.Post('https://httpbin.org/post', Payload);
+      LResponse := TAPILancamentoService.Cadastrar(LPayload);
       try
-        MemoLog.Lines.Add('Resposta: ' + Response.message);
+        MemoLog.Lines.Add('Resposta: ' + LResponse.message);
       finally
-        Response.Free;
+        LResponse.Free;
       end;
     except
       on E: Exception do
@@ -66,7 +70,7 @@ begin
     end;
 
   finally
-    Payload.Free;
+    LPayload.Free;
   end;
 end;
 
