@@ -1,7 +1,15 @@
-# Delphi REST JSON Optional
+# 🚀 Delphi REST JSON Optional
 
-> Projeto de exemplo em Delphi demonstrando serialização JSON com campos opcionais e arquitetura limpa de API.  
-> Example Delphi project demonstrating JSON serialization with optional fields and clean API architecture.
+> 🇺🇸 [Read this in English](./README.en.md)
+
+> Projeto de exemplo em Delphi demonstrando serialização JSON com campos opcionais e arquitetura limpa de API.
+
+[![Delphi](https://img.shields.io/badge/Delphi-11.3-red.svg)](https://www.embarcadero.com/products/delphi)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](#)
+
+---
+
+## 📌 Sobre o projeto
 
 Este é um projeto de demonstração em Delphi (VCL) que mostra como:
 
@@ -11,49 +19,83 @@ Este é um projeto de demonstração em Delphi (VCL) que mostra como:
 - Utilizar RTTI com `published` para serialização
 - Integrar com um serviço HTTP centralizado e reutilizável
 
-## 📁 Estrutura
+---
+
+## 🗂 Estrutura
 
 ```
-Delphi-REST-JSON-Optional/
-├── Source/
-│   ├── Main.Demo.pas              # Formulário VCL de demonstração
-│   ├── Model.Lancamento.pas      # Estrutura dos modelos base/payload/retorno
-│   ├── Service.JSONUtils.pas     # Serialização/Deserialização
-│   └── API.Abstract.Service.pas  # Serviço base com chamadas HTTP
+DelphiRestJsonOptional/
+├── API.Abstract.Service.pas       # Serviço base para requisições
+├── API.Lancamento.Service.pas     # Exemplo de requisição de lançamento
+├── API.Types.Optional.pas         # Tipagem genérica TOptional<T>
+├── DelphiRestJsonOptional.dpr     # Projeto Delphi principal (VCL)
+├── README.md                      # Este arquivo
 ```
 
-## 🚀 Requisitos
+---
 
-- Delphi 11.3
-- Projeto VCL Forms
+## ✅ Como usar `TOptional<T>`
 
-## ✅ O que o exemplo faz
+Este projeto utiliza o tipo genérico `TOptional<T>` para indicar campos opcionais de forma clara e controlada.
 
-1. O botão "Gerar JSON" cria um objeto com dados preenchidos
-2. Serializa usando RTTI + suporte a campos opcionais (TOptional)
-3. O botão "Carregar JSON" simula a leitura de resposta da API
+### 📌 Exemplos:
+
+```delphi
+// Inteiro com valor (irá serializar como número)
+Payload.ContaBancariaId := TOptional<Integer>.Create(123);
+
+// Inteiro sem valor (irá serializar como null)
+Payload.ContaBancariaId := TOptional<Integer>.Create(0); // Será tratado como null
+// ou de forma explícita:
+Payload.ContaBancariaId := TOptional<Integer>.Empty;
+
+// String com valor (irá serializar normalmente)
+Payload.NumeroDocumento := TOptional<string>.Create('ABC123');
+
+// String vazia (irá serializar como null)
+Payload.NumeroDocumento := TOptional<string>.Create('');
+```
+
+O tipo `TOptional<T>` é interpretado automaticamente com base no tipo e valor:
+- Para inteiros e floats: `0` é tratado como ausência de valor
+- Para strings: `''` é tratado como ausência de valor
+- Também é possível usar `TOptional<T>.Empty` para expressar explicitamente que o valor é nulo
+
+---
+## ✅ Funcionalidades
+
+1. O botão **"Gerar JSON"** cria um objeto com dados preenchidos
+2. Serializa usando RTTI + suporte a campos opcionais (`TOptional<T>`)
+3. O botão **"Carregar JSON"** simula a leitura de resposta da API
 4. Desserializa o JSON e preenche o objeto de resposta
 
-## 🔧 Como usar
+---
 
-1. Abra o projeto no Delphi
+## 🛠 Requisitos
+
+- Delphi **11.3** ou superior
+- Projeto **VCL Forms Application**
+
+---
+
+## 🧪 Como executar
+
+1. Abra o projeto `DelphiRestJsonOptional.dpr` no Delphi
 2. Compile e execute
-3. Clique em "Gerar JSON" para gerar a estrutura de envio
-4. Edite o JSON se desejar e clique em "Carregar JSON"
+3. Clique em **"Gerar JSON"** para criar a estrutura de envio
+4. Edite o JSON se desejar e clique em **"Carregar JSON"**
 
-## 💡 Aprendizado
+---
 
-Este projeto também é voltado especialmente para desenvolvedores Delphi que já enfrentaram dificuldade em gerar JSON com campos nulos quando não há valor válido disponível — algo necessário em integrações com APIs que diferenciam entre "zero" e "null".
+## 💡 Motivação
 
-Além disso, a abordagem adotada aqui é compatível com edições como o Delphi Professional, que não possuem suporte a recursos como JSON Interceptors nativos (presentes apenas em versões Enterprise/Architect), oferecendo uma alternativa leve e compatível baseada em RTTI e lógica explícita.
+Muitas APIs modernas distinguem claramente campos com valor zero (`0`, `''`) de campos `null`, e isso nem sempre é fácil de lidar no Delphi.
 
-Este projeto serve como referência para:
+Este projeto apresenta uma abordagem leve e compatível com edições **Professional** do Delphi (sem `JSONInterceptor`), usando RTTI e um tipo genérico `TOptional<T>` para controlar de forma explícita o que deve ou não ser serializado.
 
-- Desenvolvedores Delphi que querem controlar serialização condicional
-- APIs que precisam omitir campos em branco ou zerados
-- Arquiteturas que separam DTOs de envio e retorno
+---
 
-## 🧾 Exemplo de saída JSON
+## 📤 Exemplo de saída JSON
 
 ```json
 {
@@ -72,8 +114,20 @@ Este projeto serve como referência para:
 
 ---
 
-📬 Contribuições, sugestões ou dúvidas são bem-vindas!
+## 🤝 Contribuições
+
+Contribuições, sugestões ou dúvidas são muito bem-vindas!  
+Sinta-se à vontade para abrir uma issue ou enviar um pull request.
 
 ---
 
-Criado por [Ivonei Balena](mailto:iibalena@gmail.com)
+## 👤 Autor
+
+Criado por [Ivonei Balena](mailto:iibalena@gmail.com)  
+[LinkedIn](https://www.linkedin.com/in/ivonei-balena-a9a26465/)
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob os termos da [MIT License](LICENSE).
